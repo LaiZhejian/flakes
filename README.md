@@ -1,31 +1,63 @@
 # Installation
 
-You can switch to this configuration in a fresh NixOS by:
+1. Install Nix package manager
+   
+   a. For NixOS or WSL-NixOS
 
-``` bash
-cd /tmp
-nix --extra-experimental-features "nix-command flakes" shell nixpkgs#git
-git clone --recursive https://github.com/undefined01/flakes
-cd flakes
-git submodule update --init --recursive
-sudo -E nixos-rebuild switch --option substituters "https://mirrors.ustc.edu.cn/nix-channels/store https://nix-community.cachix.org https://cache.nixos.org/" --flake ".?submodules=1#wsl"
-sudo -E nixos-install --no-root-password 
-```
+      They are included in the system. No need to install seperately.
 
-You can install nix and switch to this configuration in darwin by:
-``` bash
-cd /tmp
-sh <(curl -L https://nixos.org/nix/install)
-nix --extra-experimental-features "nix-command flakes" shell nixpkgs#git
-git clone --recursive https://github.com/undefined01/flakes
-cd flakes
-sudo -E nix --extra-experimental-features 'nix-command flakes' run nix-darwin -- switch --flake ".?submodules=1#darwin"
-# After installation, you can rebuild the configuration by darwin-rebuild
-git submodule update --init --recursive
-sudo darwin-rebuild switch --flake ".?submodules=1#darwin"
-```
+   b. For other Linux distribution and macOS
 
-You may need to set up the proxy before installation by `export {http_proxy,https_proxy,HTTP_PROXY,HTTPS_PROXY,all_proxy,ALL_PROXY}="http://172.25.64.1:7891"`.
+     ```bash
+     sh <(curl -L https://nixos.org/nix/install)
+     ```
+
+3. Clone this repo
+
+   If git is not installed, you can use git temporarily in the nix shell `nix --extra-experimental-features "nix-command flakes" shell nixpkgs#git`.
+
+   ``` bash
+   git clone --recursive https://github.com/undefined01/flakes
+   cd flakes
+   git submodule update --init --recursive
+   ```
+
+4. Switch to this configuration
+
+   a. For NixOS or WSL-NixOS, the nixosConfiguration is applied.
+
+      ```bash
+      sudo nixos-rebuild switch --option substituters "https://mirrors.ustc.edu.cn/nix-channels/store https://nix-community.cachix.org https://cache.nixos.org/" --flake ".?submodules=1#wsl"
+      ```
+    
+      You can select the profile to switch to by changing the name after the hashtag, e.g. `.?submodules=1#work`.
+
+   b. For other Linux distribution, the homeConfiguration is applied.
+
+      ```bash
+      sudo nix --extra-experimental-features 'nix-command flakes' run home-manager/master -- switch --flake ".?submodules=1#lh"
+      ```
+
+      nix cannot change the system-wide configurations for non-NixOS distributions. You have to change the nix configuration manually. It is usually placed at `/etc/nix/nix.conf`.
+
+      ```
+      experimental-features = nix-command flakes
+      substituters = https://mirrors.ustc.edu.cn/nix-channels/store https://cache.nixos.org/
+      ```
+
+      If your nix command are missing, try `. ~/.nix-profile/etc/profile.d/nix.sh` to recover the access to nix command.
+
+   c. For macOS, the darwinConfiguration is applied.
+
+      ```bash
+      sudo nix --extra-experimental-features 'nix-command flakes' run nix-darwin -- switch --flake ".?submodules=1#darwin"
+      ```
+
+      After installation, you can rebuild the configuration by darwin-rebuild
+
+      ```bash
+      sudo darwin-rebuild switch --flake ".?submodules=1#darwin"
+      ```
 
 # Known Issues
 
@@ -34,6 +66,12 @@ You may need to set up the proxy before installation by `export {http_proxy,http
 # Useful Commands
 
 ```
+# set up the proxy
+export {http_proxy,https_proxy,HTTP_PROXY,HTTPS_PROXY,all_proxy,ALL_PROXY}="http://172.25.64.1:7891"
+
+# update submodules
+git submodule update --init --recursive
+
 # Formatting code
 nix fmt .
 
