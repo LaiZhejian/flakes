@@ -21,8 +21,8 @@ in
   config = {
     programs.git = {
       enable = true;
-      userName = "Undefined01";
-      userEmail = "amoscr@163.com";
+      userName = "Jackie_Lai";
+      userEmail = "742949301@qq.com";
 
       aliases = {
         graph = "log --all --decorate --oneline --graph";
@@ -47,10 +47,6 @@ in
         log.date = "iso";
         column.ui = "auto";
         branch.sort = "committerdate";
-      } // optionalAttrs cfg.signing.enable {
-        commit.gpgSign = true;
-        gpg.format = "ssh";
-        user.signingkey = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
       };
     };
 

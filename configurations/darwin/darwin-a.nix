@@ -14,7 +14,6 @@
 
   # nix integration for zsh and fish
   programs.zsh.enable = true;
-  programs.fish.enable = true;
 
   # Allow sudo authentication with Touch ID
   security.pam.services.sudo_local.touchIdAuth = true;

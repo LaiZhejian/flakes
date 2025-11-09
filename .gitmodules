@@ -1,3 +1,15 @@
-[submodule "nvim-config"]
-	path = home/modules/commandline/neovim/nvim-config
-	url = https://github.com/Undefined01/nvim-config
+[submodule "home/modules/commandline/zsh/plugins/zsh-autosuggestions"]
+	path = home/modules/commandline/zsh/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "home/modules/commandline/zsh/plugins/zsh-syntax-highlighting"]
+	path = home/modules/commandline/zsh/plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting
+[submodule "home/modules/commandline/zsh/plugins/cmdtime"]
+	path = home/modules/commandline/zsh/plugins/cmdtime
+	url = https://github.com/tom-auger/cmdtime.git
+[submodule "home/modules/commandline/zsh/plugins/fzf-tab"]
+	path = home/modules/commandline/zsh/plugins/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab
+[submodule "home/modules/commandline/zsh/plugins/fzf-ls"]
+	path = home/modules/commandline/zsh/plugins/fzf-ls
+	url = https://github.com/ezh/fzf-ls

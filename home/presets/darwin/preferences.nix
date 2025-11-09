@@ -3,158 +3,124 @@
 {
   targets.darwin = {
     defaults = {
+
+      ".GlobalPreferences_m" = {
+        AppleLanguages = [
+          "en-CN"
+          "zh-Hans-CN"
+        ];
+        AppleLocale = "en_CN";
+      };
+
       "com.apple.desktopservices" = {
         DSDontWriteNetworkStores = true;
         DSDontWriteUSBStores = true;
       };
 
-      NSGlobalDomain = {
-        # Enable two finger swipe to navigate backward or forward
-        AppleEnableMouseSwipeNavigateWithScrolls = true;
-        AppleEnableSwipeNavigateWithScrolls = true;
-        # Auto switch between light and dark mode
-        AppleInterfaceStyleSwitchesAutomatically = true;
-
-        AppleICUForce24HourTime = true;
+      "Apple Global Domain" = {
         AppleMeasurementUnits = "Centimeters";
-        AppleMetricUnits = true;
+        AppleMenuBarVisibleInFullscreen = 0;
+        AppleMetricUnits = 1;
+        AppleMiniaturizeOnDoubleClick = 0;
+        ApplePressAndHoldEnabled = 0;
+        AppleShowAllExtensions = 1;
         AppleTemperatureUnit = "Celsius";
-
-        AppleShowAllExtensions = true;
-        AppleShowAllFiles = true;
-
-        # Disable the character modification menu when holding a key down, just repeat the key
-        ApplePressAndHoldEnabled = false;
-        InitialKeyRepeat = 15;
-        KeyRepeat = 2;
-
-        "com.apple.mouse.tapBehavior" = 1;
-        # Do not make a feedback beep when adjusting volume
-        "com.apple.sound.beep.feedback" = 0;
-        "com.apple.sound.beep.volume" = 0.0;
-
-        # Natrual scrolling direction, suitable for touchpad
-        # For mouse, use mos to reverse the scrolling direction
-        "com.apple.swipescrolldirection" = true;
-        "com.apple.trackpad.forceClick" = true;
-        "com.apple.trackpad.scaling" = 0.875;
-
-        # Use fn keys as standard function keys
-        "com.apple.keyboard.fnState" = 1;
-
-      };
-
-      "com.apple.dock" =
-        let
-          # Convert the item to dock tile
-          # Copied from https://github.com/nix-darwin/nix-darwin/blob/e2676937faf868111dcea6a4a9cf4b6549907c9d/modules/system/defaults/dock.nix#L172-L196
-          guessType = item:
-            if builtins.isString item then
-              if lib.strings.hasSuffix ".app" item then { app = item; }
-              else if lib.strings.hasSuffix "/" item then { folder = item; }
-              else { file = item; }
-            else item;
-          toTile = item:
-            if item ? app then {
-              tile-type = "file-tile";
-              tile-data = { };
-              tile-data.file-data = {
-                _CFURLString = item.app;
-                _CFURLStringType = 0;
-              };
-            } else if item ? spacer then {
-              tile-data = { };
-              tile-type = if item.spacer.small then "small-spacer-tile" else "spacer-tile";
-            } else if item ? folder then {
-              tile-data.file-data = {
-                _CFURLString = "file://" + item.folder;
-                _CFURLStringType = 15;
-              };
-              tile-type = "directory-tile";
-            } else if item ? file then {
-              tile-data.file-data = {
-                _CFURLString = "file://" + item.file;
-                _CFURLStringType = 15;
-              };
-              tile-type = "file-tile";
-            } else item;
-          toTiles = items: map toTile (map guessType items);
-        in
-        {
-          orientation = "bottom";
-          autohide = true;
-          autohide-delay = 0;
-          minimize-to-application = false;
-          magnification = true;
-
-          show-recents = false;
-
-          persistent-apps = toTiles [
-            "/System/Applications/Launchpad.app"
-            # "/System/Applications/Utilities/Terminal.app"
-            "${pkgs.wezterm}/Applications/WezTerm.app"
-            "${pkgs.vscode}/Applications/Visual Studio Code.app"
-            "/Applications/Firefox.app"
-            "/System/Applications/System Settings.app"
-
-            { spacer.small = true; }
-          ];
-          persistent-others = toTiles [
-            "${config.home.homeDirectory}/Documents/"
-            "${config.home.homeDirectory}/Downloads/"
-          ];
-          tilesize = 48;
-
-          # Disable hot corners action
-          # Full list of actions can be found at https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.dock.wvous-bl-corner
-          wvous-tl-corner = 1;
-          wvous-tr-corner = 1;
-          wvous-bl-corner = 1;
-          wvous-br-corner = 1;
+        InitialKeyRepeat = 25;
+        "InitialKeyRepeat_Level_Saved" = 4;
+        "KB_DoubleQuoteOption" = "\\U201cabc\\U201d";
+        "KB_SingleQuoteOption" = "\\U2018abc\\U2019";
+        "KB_SpellingLanguage" = {
+          "KB_SpellingLanguageIsAutomatic" = 1;
         };
-
-      "com.apple.finder" = {
-        AppleShowAllFiles = true;
-        _FXShowPosixPathInTitle = true;
-      };
-
-      # 充电提示音
-      "com.apple.PowerChime" = {
-        ChimeOnAllHardware = true;
+        KeyRepeat = 2;
+        NSAllowContinuousSpellChecking = 0;
+        NSAutomaticCapitalizationEnabled = 0;
+        NSAutomaticDashSubstitutionEnabled = 0;
+        NSAutomaticPeriodSubstitutionEnabled = 0;
+        NSAutomaticQuoteSubstitutionEnabled = 0;
+        NSAutomaticSpellingCorrectionEnabled = 1;
+        NSAutomaticTextCompletionEnabled = 0;
+        NSNavPanelFileLastListModeForOpenModeKey = 1;
+        NSNavPanelFileListModeForOpenMode2 = 1;
+        NSPreferredWebServices = {
+          NSWebServicesProviderWebSearch = {
+            NSDefaultDisplayName = "Baidu";
+            NSProviderIdentifier = "com.baidu.www";
+          };
+        };
+        NavPanelFileListModeForOpenMode = 1;
+        TISRomanSwitchState = 1;
+        WebAutomaticSpellingCorrectionEnabled = 1;
+        "com.apple.finder.SyncExtensions" = {
+          collaborationMap = { };
+          dirMap = { };
+        };
+        "com.apple.keyboard.fnState" = 1;
+        "com.apple.mouse.scaling" = "0.875";
+        "com.apple.scrollwheel.scaling" = "0.3125";
+        "com.apple.sound.beep.flash" = 0;
+        "com.apple.sound.beep.sound" = "/System/Library/Sounds/Pop.aiff";
+        "com.apple.sound.beep.volume" = "0.6187834";
+        "com.apple.springing.delay" = "0.5";
+        "com.apple.springing.enabled" = 1;
+        "com.apple.swipescrolldirection" = 0;
+        "com.apple.trackpad.forceClick" = 1;
+        "com.apple.trackpad.scaling" = 1;
+        "com.apple.trackpad.scrolling" = "0.3125";
       };
 
       "com.apple.AppleMultitouchTrackpad" = {
-        # Enable tap-to-click
-        Clicking = true;
-        # Enable tap-to-drag
-        Dragging = true;
-        # Enable two finger tap for right click
-        TrackpadRightClick = 1;
+        ActuateDetents = 1;
+        Clicking = 1;
+        DragLock = 0;
+        Dragging = 0;
+        FirstClickThreshold = 0;
+        ForceSuppressed = 0;
+        SecondClickThreshold = 0;
+        TrackpadCornerSecondaryClick = 0;
+        TrackpadFiveFingerPinchGesture = 2;
+        TrackpadFourFingerHorizSwipeGesture = 2;
+        TrackpadFourFingerPinchGesture = 2;
+        TrackpadFourFingerVertSwipeGesture = 2;
         TrackpadHandResting = 1;
         TrackpadHorizScroll = 1;
         TrackpadMomentumScroll = 1;
-        # Enable three finger drag
-        TrackpadThreeFingerDrag = true;
-        TrackpadThreeFingerHorizSwipeGesture = 2;
+        TrackpadPinch = 1;
+        TrackpadRightClick = 1;
+        TrackpadRotate = 1;
+        TrackpadScroll = 1;
+        TrackpadThreeFingerDrag = 1;
+        TrackpadThreeFingerHorizSwipeGesture = 0;
         TrackpadThreeFingerTapGesture = 0;
-        TrackpadThreeFingerVertSwipeGesture = 2;
+        TrackpadThreeFingerVertSwipeGesture = 0;
         TrackpadTwoFingerDoubleTapGesture = 1;
         TrackpadTwoFingerFromRightEdgeSwipeGesture = 3;
-        # Enable four finger swipe for mission control
-        TrackpadFourFingerHorizSwipeGesture = 2;
-        # Enable four finger swipe for app expose
-        TrackpadFourFingerVertSwipeGesture = 2;
+        USBMouseStopsTrackpad = 0;
+        UserPreferences = 1;
+        version = 12;
       };
 
       "com.apple.Siri" = {
+        HotkeyTag = 0;
+        SiriPrefStashedStatusMenuVisible = 0;
         StatusMenuVisible = 0;
         VoiceTriggerUserEnabled = 0;
       };
+
       "com.apple.WindowManager" = {
         AppWindowGroupingBehavior = 1;
         AutoHide = 0;
-        EnableStandardClickToShowDesktop = 0;
+        EnableTiledWindowMargins = 0;
+        EnableTilingByEdgeDrag = 0;
+        EnableTopTilingByEdgeDrag = 0;
+        GloballyEnabled = 1;
+        GloballyEnabledEver = 1;
+        HideDesktop = 1;
+        StageManagerHideWidgets = 1;
+        StandardHideDesktopIcons = 0;
+        StandardHideWidgets = 0;
       };
+
       "com.apple.menuextra.clock" = {
         FlashDateSeparators = false;
         IsAnalog = false;

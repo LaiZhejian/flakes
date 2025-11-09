@@ -5,25 +5,25 @@
     ../../modules/commandline/git
     ../../modules/commandline/ssh
     ../../modules/commandline/bash
-    ../../modules/commandline/fish
     ../../modules/commandline/zsh
-    ../../modules/commandline/starship
+    ../../modules/commandline/fish
+    ../../modules/commandline/starship # shell prompt 
 
-    ../../modules/commandline/eza
-    ../../modules/commandline/bat
-    ../../modules/commandline/bottom
-    ../../modules/commandline/zoxide
-    ../../modules/commandline/fd
-    ../../modules/commandline/fzf
+    ../../modules/commandline/eza # ll
+    ../../modules/commandline/bat # cat
+    ../../modules/commandline/bottom # top
+    ../../modules/commandline/zoxide # cd
+    ../../modules/commandline/fd # find filename
+    ../../modules/commandline/fzf # file preview
     ../../modules/commandline/gitui
-    ../../modules/commandline/tealdeer
-    ../../modules/commandline/atuin
-    ../../modules/commandline/yazi
+    ../../modules/commandline/tealdeer # tldr
+    ../../modules/commandline/atuin # history
+    ../../modules/commandline/yazi # file broswer
 
     ../../modules/commandline/uv
     ../../modules/commandline/direnv
-    ../../modules/commandline/neovim
-    ../../modules/commandline/rclone
+    ../../modules/commandline/neovim # editor
+    # ../../modules/commandline/rclone
   ];
 
   home.packages = with pkgs; [
@@ -36,20 +36,18 @@
     unzip
     p7zip
     zstd
-    vim
 
     gnupg
     openssl
     age
 
-    du-dust
-    ripgrep
-    jq
-    sd
-    tokei
-    difftastic
+    du-dust # du extended
+    ripgrep # (rg) find content
+    jq # json preview
+    sd # regex
+    tokei # tokens statistic
+    difftastic # diff extended
 
-    ntfs3g
-    zellij
+    tmux
   ];
 }

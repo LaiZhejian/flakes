@@ -13,22 +13,19 @@
     user = user;
     enable = true;
     casks = [
-      "mos"
       # "macfuse"
-      "rwts-pdfwriter"
       # "clash-verge-rev"
       # "wezterm"   # installed by nix
       # "visual-studio-code"  # installed by nix
-      # "sogou-input" # no longer available in homebrew 
-      "qq"
-      "wechat"
+      # "qq"
+      # "wechat"
       # "thunderbird" # installed by nix
-      "zotero" # installed by nix
-      "obs" # installed by nix
-      "vlc"
+      # "zotero" # installed by nix
       # "zerotier-one"
-      "tencent-meeting"
-      "cleanclip"
+      # "tencent-meeting"
+      "1password-cli"
+      "keyboardcleantool"
+      "surge"
     ];
     taps = builtins.attrNames config.nix-homebrew.taps;
   };

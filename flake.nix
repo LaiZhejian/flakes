@@ -118,7 +118,7 @@
       darwinConfigurations = {
         darwin =
           let
-            user = "han";
+            user = "dream";
           in
           inputs.darwin.lib.darwinSystem {
             system = "aarch64-darwin";
