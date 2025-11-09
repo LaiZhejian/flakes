@@ -60,7 +60,7 @@
 
   outputs = { self, nixpkgs, ... }@inputs:
     let
-      user = "lh";
+      user = "dream";
       specialArgs = {
         inherit self inputs user;
       };
@@ -148,7 +148,7 @@
       # Expose the package set, including overlays, for convenience.
       darwinPackages = self.darwinConfigurations.darwin.pkgs;
 
-      homeConfigurations.lh = inputs.home-manager.lib.homeManagerConfiguration {
+      homeConfigurations.dream = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
         # Specify your home configuration modules here, for example,
@@ -157,7 +157,7 @@
 
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix
-        extraSpecialArgs = specialArgs;
+        extraSpecialArgs = specialArgs // {isWsl=true;};
       };
     };
 }

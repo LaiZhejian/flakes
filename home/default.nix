@@ -4,7 +4,6 @@
   imports = [
     ./common.nix
     ./presets/commandline
-    ./presets/desktop
   ];
 
   home.username = pkgs.lib.mkDefault user;

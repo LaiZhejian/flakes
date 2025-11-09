@@ -15,7 +15,7 @@ myproxy_off() {
   git config --global --unset http.proxy
   git config --global --unset https.proxy
 }
-myproxy_on
+# myproxy_on
 
 campusproxy_on() {
   sudo easytier-core -c "/Users/dream/Library/Mobile Documents/iCloud~com~nssurge~inc/Documents/easytier.toml"

@@ -25,7 +25,7 @@ function myproxy_off
     git config --global --unset https.proxy
 end
 
-myproxy_on
+# myproxy_on
 
 
 # campus proxy
