@@ -19,11 +19,11 @@
   security.pam.services.sudo_local.touchIdAuth = true;
 
   hostSpec.users.dream = {
-    name = lib.mkForce "bytedance"
+    name = lib.mkForce "bytedance";
     homeConfiguration = lib.custom.fromFlakeRoot "home/top/darwin/darwin-b.nix";
   }
 
-  hostSpec.primaryUser = lib.mkForce "bytedance"
+  hostSpec.primaryUser = lib.mkForce "bytedance";
 
   # nix integration for zsh and fish
   programs.zsh.enable = true;
