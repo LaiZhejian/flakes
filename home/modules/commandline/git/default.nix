@@ -43,7 +43,7 @@ in
           log.date = "iso";
           column.ui = "auto";
           branch.sort = "committerdate";
-        }
+          safe.directory = "*";
       ];
     };
 
