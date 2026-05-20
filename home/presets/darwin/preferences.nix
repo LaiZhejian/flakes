@@ -23,7 +23,7 @@
   # Set Home and End keys to move to the beginning and end of lines like Windows
   # https://discussions.apple.com/thread/251108215?sortBy=rank
   home.file."Library/KeyBindings/DefaultKeyBinding.dict" = {
-    enable = true;
+    enable = false;
     text = ''
       {
         "\UF729" = "moveToBeginningOfLine:"; /* Home */
