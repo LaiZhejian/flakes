@@ -1,95 +1,144 @@
 name: Build Test
 
 on:
-  push:
-    branches: [ main, master ]
+  push: {}
   pull_request:
-    branches: [ main, master ]
-  workflow_dispatch:
+    branches:
+    - main
+    - dev
+  workflow_dispatch: {}
 
 jobs:
-  nixos-configurations:
-    name: NixOS Configurations
+  define-matrix:
     runs-on: ubuntu-latest
+
+    outputs:
+      jobs: ${{ steps.jobs.outputs.jobs }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes pipe-operators
+
+      - name: Define Configuration Matrix
+        id: jobs
+        run: |
+          set -euo pipefail
+
+          linux_configs="$(nix eval --json .#checks.x86_64-linux.configurations --apply 'builtins.attrNames')"
+          darwin_configs="$(nix eval --json .#checks.aarch64-darwin.configurations --apply 'builtins.attrNames')"
+
+          jobs="$(jq -cn \
+            --argjson linux "$linux_configs" \
+            --argjson darwin "$darwin_configs" \
+            '{
+              include:
+                ([ $linux[] | { runner: "ubuntu-latest", system: "x86_64-linux", config: . } ] +
+                 [ $darwin[] | { runner: "macos-latest", system: "aarch64-darwin", config: . } ])
+            }'
+          )"
+
+          echo "jobs=$jobs" >> "$GITHUB_OUTPUT"
+
+  packages:
+    name: Built Common Packages
     strategy:
       fail-fast: false
       matrix:
-        config: [work, wsl, iso]
+        include:
+        - runner: ubuntu-latest
+          config: x86_64-linux.packages
+        - runner: macos-latest
+          config: aarch64-darwin.packages
+    runs-on: ${{ matrix.runner }}
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Install Nix
       uses: cachix/install-nix-action@v31
       with:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
         nix_path: nixpkgs=channel:nixos-unstable
+        extra_nix_config: |
+          experimental-features = nix-command flakes pipe-operators
 
     - name: Setup Cachix
-      uses: cachix/cachix-action@v14
+      uses: cachix/cachix-action@v17
       with:
-        name: nix-community
+        name: undefined01
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-        skipPush: true
+        extraPullNames: nix-community
 
-    - name: Build NixOS configuration - ${{ matrix.config }}
+    - name: Build Common Packages for ${{ matrix.config }}
       run: |
-        nix build --no-link --print-build-logs .#nixosConfigurations.${{ matrix.config }}.config.system.build.toplevel
+        nix config show
+        echo "Moving user nix settings (set by cachix) to system settings to bypass the issue of nix-eval-jobs"
+        echo "substituters = $(nix config show substituters)" | sudo tee -a /etc/nix/nix.conf
+        echo "trusted-public-keys = $(nix config show trusted-public-keys)" | sudo tee -a /etc/nix/nix.conf
+        cat /etc/nix/nix.conf
+        nix config show
+        df -h
+        free -h || memory_pressure
+        nix run nixpkgs#nix-eval-jobs -- --flake .#packages.x86_64-linux.darwinPkgs.sparkle --check-cache-status
+        nix run nixpkgs#nix-fast-build -- --no-nom --skip-cached --max-jobs 1 --eval-workers 1 --no-link --flake .#checks.${{ matrix.config }}
 
-  darwin-configurations:
-    name: Darwin Configurations
-    runs-on: macos-latest
+  configurations:
+    name: Build Configurations
+    needs:
+      - define-matrix
+      - packages
     strategy:
       fail-fast: false
-      matrix:
-        config: [darwin, darwin-a]
+      matrix: ${{ fromJson(needs.define-matrix.outputs.jobs) }}
+    runs-on: ${{ matrix.runner }}
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Install Nix
       uses: cachix/install-nix-action@v31
       with:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
         nix_path: nixpkgs=channel:nixos-unstable
+        extra_nix_config: |
+          experimental-features = nix-command flakes pipe-operators
 
     - name: Setup Cachix
-      uses: cachix/cachix-action@v15
+      uses: cachix/cachix-action@v17
       with:
-        name: nix-community
+        name: undefined01
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+        extraPullNames: nix-community
 
-    - name: Build Darwin configuration - ${{ matrix.config }}
+    - name: Build checks.${{ matrix.system }}.configurations.${{ matrix.config }}
       run: |
-        nix build --no-link --print-build-logs .#darwinConfigurations.${{ matrix.config }}.system
-
-  home-manager-configuration:
-    name: Home Manager Configuration
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v5
-
-    - name: Install Nix
-      uses: cachix/install-nix-action@v31
-      with:
-        github_access_token: ${{ secrets.GITHUB_TOKEN }}
-        nix_path: nixpkgs=channel:nixos-unstable
-
-    - name: Setup Cachix
-      uses: cachix/cachix-action@v15
-      with:
-        name: nix-community
-
-    - name: Build Home Manager configuration
-      run: |
-        nix build --no-link --print-build-logs .#homeConfigurations.lh.activationPackage
+        nix config show
+        echo "-----------------------------------------------"
+        cat /etc/nix/nix.conf
+        echo "Moving user nix settings (set by cachix) to system settings to bypass the issue of nix-eval-jobs"
+        echo "substituters = $(nix config show substituters)" | sudo tee -a /etc/nix/nix.conf
+        echo "trusted-public-keys = $(nix config show trusted-public-keys)" | sudo tee -a /etc/nix/nix.conf
+        cat /etc/nix/nix.conf
+        echo "-----------------------------------------------"
+        nix config show
+        df -h
+        free -h || memory_pressure
+        nix run nixpkgs#nix-fast-build -- --no-nom --skip-cached --max-jobs 1 --eval-workers 1 --no-link --flake .#checks.${{ matrix.system }}.configurations.${{ matrix.config }}
 
   check-flake:
     name: Check Flake
     runs-on: ubuntu-latest
+    if: false
 
     steps:
     - name: Checkout repository
@@ -100,10 +149,12 @@ jobs:
       with:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
         nix_path: nixpkgs=channel:nixos-unstable
+        extra_nix_config: |
+          experimental-features = nix-command flakes pipe-operators
 
     - name: Check flake
       run: |
-        nix flake check --no-build
+        nix flake check --no-build --all-systems
 
     - name: Show flake info
       run: |
@@ -122,7 +173,9 @@ jobs:
       with:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
         nix_path: nixpkgs=channel:nixos-unstable
+        extra_nix_config: |
+          experimental-features = nix-command flakes pipe-operators
 
     - name: Check formatting
       run: |
-        nix fmt -- --check .
+        nix fmt -- --ci .

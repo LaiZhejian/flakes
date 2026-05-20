@@ -14,5 +14,8 @@
     };
   };
 
-  programs.git.ignores = [ ".direnv/" ".envrc" ];
+  programs.git.ignores = [
+    ".direnv/"
+    ".envrc"
+  ];
 }

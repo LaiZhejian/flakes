@@ -8,7 +8,6 @@
     ../../modules/desktop/waybar
     ../../modules/desktop/input
 
-    ../../modules/desktop/clash-verge-rev
     ../../modules/desktop/foot
     ../../modules/desktop/wezterm
     ../../modules/desktop/vscode
@@ -24,8 +23,10 @@
   home.packages = with pkgs; [
     polkit # for pkexec, used by clash-verge-rev
 
+    sparkle # clash client
+
     localsend
     qq
-    # nur.repos.novel2430.wechat-universal-bwrap
+    wechat
   ];
 }

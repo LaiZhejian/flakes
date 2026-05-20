@@ -1,0 +1,103 @@
+name: Flake Update
+
+on:
+  # scheduled workflow will only run on the default branch (main)
+  schedule:
+    - cron: "0 1 * * *"
+  push:
+    branches:
+      - dev
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flake-update-bot-dev-lock
+  cancel-in-progress: true
+
+env:
+  SOURCE_BRANCH: dev
+  TARGET_BRANCH: bot/dev-lock
+
+jobs:
+  update-lock:
+    name: Update bot/dev-lock
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ env.SOURCE_BRANCH }}
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes pipe-operators
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Prepare bot/dev-lock
+        run: |
+          set -euo pipefail
+
+          git fetch --no-tags origin "${SOURCE_BRANCH}"
+
+          if git ls-remote --exit-code --heads origin "${TARGET_BRANCH}" >/dev/null 2>&1; then
+            git fetch --no-tags origin "${TARGET_BRANCH}"
+            git switch -C "${TARGET_BRANCH}" "origin/${TARGET_BRANCH}"
+          else
+            git switch -C "${TARGET_BRANCH}" "origin/${SOURCE_BRANCH}"
+          fi
+
+          merge_failed=false
+          git merge --no-ff --no-edit -m "bot: merge ${SOURCE_BRANCH} into ${TARGET_BRANCH}" "origin/${SOURCE_BRANCH}" || merge_failed=true
+          if [ "$merge_failed" = true ]; then
+            echo "Merge conflict detected; force merging with 'others' strategy"
+            git merge --abort
+
+            tree=$(git rev-parse ${SOURCE_BRANCH}^{tree})
+            p1=$(git rev-parse ${TARGET_BRANCH})
+            p2=$(git rev-parse ${SOURCE_BRANCH})
+            commit=$(git commit-tree "$tree" -p "$p1" -p "$p2" -m "bot: force merge ${SOURCE_BRANCH} into ${TARGET_BRANCH}")
+            echo "Commit constructed: $commit"
+
+            git reset --hard "$commit"
+          fi
+
+      - name: Update flake.lock
+        id: update-lock
+        run: |
+          set -euo pipefail
+
+          nix flake update
+
+          pkgs/darwinPkgs/sparkle-bin/update.sh
+
+          if git diff --quiet; then
+            echo "already up to date"
+            exit 0
+          fi
+
+          git add .
+          git commit -m "bot: update"
+          git push origin "HEAD:${TARGET_BRANCH}"
+          echo "build_test=true" >> "$GITHUB_OUTPUT"
+      
+      - name: Invoke Build Test workflow
+        uses: benc-uk/workflow-dispatch@v1
+        if: ${{ steps.update-lock.outputs.build_test == 'true' }}
+        with:
+          workflow: build-test.yml
+          ref: ${{ env.TARGET_BRANCH }}

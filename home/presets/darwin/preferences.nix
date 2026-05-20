@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   targets.darwin = {
@@ -16,7 +21,6 @@
         DSDontWriteNetworkStores = true;
         DSDontWriteUSBStores = true;
       };
-      
     };
   };
 

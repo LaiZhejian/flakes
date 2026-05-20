@@ -1,0 +1,7 @@
+keys:
+  - &lh age1c3fnsxugftwvjwmmsxz6ff4xaqsg97salhzmjfrmxd6uh5ajzacq99cmtq
+creation_rules:
+  - path_regex: ^home/
+    key_groups:
+    - age:
+      - *lh

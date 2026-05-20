@@ -1,22 +1,32 @@
-{ pkgs, lib, config, ... }@args:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}@args:
 
 let
   inherit (lib) types;
   inherit (lib.options) mkOption;
   cfg = config.customize.vscode;
 
+  configDir = "Code";
+  userDir =
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      "${config.home.homeDirectory}/Library/Application Support/${configDir}/User"
+    else
+      "${config.xdg.configHome}/${configDir}/User";
+  configFilePath =
+    name: "${userDir}/${lib.optionalString (name != "default") "profiles/${name}/"}settings.json";
+
   marketplace = (import ./extensions.nix) args;
   # Only extensions whose name is not in cfg.extensions.exclude are added
-  filterExtensions = extList:
-    builtins.filter
-      (
-        ext: lib.lists.all
-          (
-            excludedName: !(lib.strings.hasInfix excludedName ext.name)
-          )
-          cfg.extensions.exclude
-      )
-      extList;
+  filterExtensions =
+    extList:
+    builtins.filter (
+      ext:
+      lib.lists.all (excludedName: !(lib.strings.hasInfix excludedName ext.name)) cfg.extensions.exclude
+    ) extList;
 in
 {
   imports = [
@@ -86,6 +96,13 @@ in
       github.copilot-chat
     ];
 
+    # Replace the immutable settings.json to mutable one.
+    home.file."${configFilePath "default"}".enable = false;
+    home.mutableFile."${configFilePath "default"}" = {
+      format = "json";
+      source = config.home.file."${configFilePath "default"}".source;
+    };
+
     programs.vscode = {
       enable = true;
       profiles.default = {
@@ -93,8 +110,12 @@ in
 
         userSettings =
           let
-            addPrefix = prefix: attr:
-              lib.attrsets.mapAttrs' (name: value: { name = "${prefix}.${name}"; value = value; }) attr;
+            addPrefix =
+              prefix: attr:
+              lib.attrsets.mapAttrs' (name: value: {
+                name = "${prefix}.${name}";
+                value = value;
+              }) attr;
           in
           (addPrefix "editor" {
             fontFamily = "'Cascadia Code NF', 'Cascadia Code', 'CaskaydiaCove Nerd Font', 'HarmonyOS Sans', 'Noto Sans CJK SC', 'Source Han Sans SC', Consolas, 'Courier New', monospace";
@@ -108,7 +129,8 @@ in
             formatOnType = false;
 
             mouseWheelZoom = true;
-          }) // {
+          })
+          // {
             "github.copilot.enable" = {
               "*" = true;
               "plaintext" = true;
@@ -129,7 +151,51 @@ in
             "explorer.confirmDragAndDrop" = false;
             "explorer.confirmDelete" = false;
             "terminal.integrated.enableMultiLinePasteWarning" = "never";
-          };
+            "diffEditor.ignoreTrimWhitespace" = false;
+
+            "[json]" = {
+              "editor.defaultFormatter" = "vscode.json-language-features";
+            };
+            "[jsonl]" = {
+              "editor.defaultFormatter" = "vscode.json-language-features";
+            };
+            "[jsonc]" = {
+              "editor.defaultFormatter" = "vscode.json-language-features";
+            };
+          }
+          // (addPrefix "gitlens" {
+            "graph.layout" = "editor";
+          })
+          // (addPrefix "terminal.integrated" {
+            accessibleViewPreserveCursorPosition = true;
+            "defaultProfile.linux" = "fish";
+            "defaultProfile.osx" = "fish";
+            "scrollback" = 100000;
+          });
+
+        keybindings = [
+          {
+            key = "ctrl+q";
+            command = "-workbench.action.quickOpenNavigateNextInViewPicker";
+            when = "inQuickOpen && inViewsPicker";
+          }
+          {
+            key = "ctrl+q";
+            command = "-workbench.action.quickOpenView";
+          }
+          {
+            key = "ctrl+j";
+            command = "-workbench.action.togglePanel";
+          }
+          {
+            key = "shift+enter";
+            command = "workbench.action.terminal.sendSequence";
+            args = {
+              text = builtins.fromJSON ''"\u001b\r"''; # Nix does not support \u escape, use fromJSON to workaround
+            };
+            when = "terminalFocus";
+          }
+        ];
       };
     };
   };

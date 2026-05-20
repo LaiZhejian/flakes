@@ -1,29 +1,37 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   imports = [
+    inputs.mutable-home-files.homeManagerModules.default
+
+    ../../modules/misc
+    ../../modules/commandline/nix-index
+
     ../../modules/commandline/git
     ../../modules/commandline/ssh
     ../../modules/commandline/bash
     ../../modules/commandline/zsh
     ../../modules/commandline/fish
-    ../../modules/commandline/starship # shell prompt 
+    ../../modules/commandline/starship # shell prompt
 
-    ../../modules/commandline/eza # ll
-    ../../modules/commandline/bat # cat
-    ../../modules/commandline/bottom # top
-    ../../modules/commandline/zoxide # cd
-    ../../modules/commandline/fd # find filename
-    ../../modules/commandline/fzf # file preview
-    ../../modules/commandline/gitui
-    ../../modules/commandline/tealdeer # tldr
-    ../../modules/commandline/atuin # history
-    ../../modules/commandline/yazi # file broswer
+    ../../modules/commandline/eza
+    ../../modules/commandline/bat
+    ../../modules/commandline/ls-or-cat
+    ../../modules/commandline/bottom
+    ../../modules/commandline/zoxide
+    ../../modules/commandline/fd
+    ../../modules/commandline/fzf
+    ../../modules/commandline/lazygit
+    ../../modules/commandline/tealdeer
+    ../../modules/commandline/atuin
+    ../../modules/commandline/yazi
 
     ../../modules/commandline/uv
     ../../modules/commandline/direnv
-    ../../modules/commandline/neovim # editor
-    # ../../modules/commandline/rclone
+    ../../modules/commandline/neovim
+    ../../modules/commandline/rclone
+    ../../modules/commandline/codex
+    ../../modules/commandline/claudecode
   ];
 
   home.packages = with pkgs; [
@@ -41,12 +49,12 @@
     openssl
     age
 
-    du-dust # du extended
-    ripgrep # (rg) find content
-    jq # json preview
-    sd # regex
-    tokei # tokens statistic
-    difftastic # diff extended
+    dust
+    ripgrep
+    jq
+    sd
+    tokei
+    difftastic
 
     tmux
   ];

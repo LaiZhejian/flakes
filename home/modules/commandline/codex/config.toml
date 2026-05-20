@@ -1,0 +1,21 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
+model_context_window = 1000000
+model_auto_compact_token_limit = 900000
+
+model_provider = "Octopus"
+
+[model_providers.Octopus]
+name = "NotOpenAI"
+base_url = "https://octopus.lihan.fun/v1"
+wire_api = "responses"
+requires_openai_auth = false
+env_key = "OCTOPUS_API_KEY"
+
+[features]
+guardian_approval = true
+
+[tui]
+status_line = ["model-with-reasoning", "context-window-size", "context-remaining", "current-dir", "git-branch", "used-tokens", "total-input-tokens", "total-output-tokens"]

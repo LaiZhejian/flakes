@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   mathmod = x: m: x - (x / m) * m;
@@ -23,12 +28,11 @@ in
         "DP-1, 3840x2160@60, 0x0, 1.5"
       ];
 
-      bindm =
-        [
-          # Mouse movements
-          "$mod, mouse:272, movewindow"
-          "$mod, mouse:273, resizewindow"
-        ];
+      bindm = [
+        # Mouse movements
+        "$mod, mouse:272, movewindow"
+        "$mod, mouse:273, resizewindow"
+      ];
       bind = [
         "$mod, F11, fullscreen,"
         "$mod, s, togglesplit,"
@@ -45,28 +49,20 @@ in
         "$mod CTRL, Right, workspace, m+1"
 
       ]
-      ++
-      (
+      ++ (
         # $mod + {1..0} to switch workspace {1..10}
-        builtins.genList
-          (x: "$mod, ${toString(mathmod (x + 1) 10)}, workspace, ${toString(x + 1)}")
-          10
+        builtins.genList (x: "$mod, ${toString (mathmod (x + 1) 10)}, workspace, ${toString (x + 1)}") 10
       )
-      ++
-      (
+      ++ (
         # $mod SHIFT + {1..0} to move window to workspace {1..10}
-        builtins.genList
-          (x: "$mod SHIFT, ${toString(mathmod (x + 1) 10)}, movetoworkspace, ${toString(x + 1)}")
-          10
+        builtins.genList (
+          x: "$mod SHIFT, ${toString (mathmod (x + 1) 10)}, movetoworkspace, ${toString (x + 1)}"
+        ) 10
       )
-      ++
-      (
-        lib.optionals config.programs.wezterm.enable [
-          "$mod, Return, exec, ${lib.getExe config.programs.wezterm.package}"
-        ]
-      )
-      ++
-      (
+      ++ (lib.optionals config.programs.wezterm.enable [
+        "$mod, Return, exec, ${lib.getExe config.programs.wezterm.package}"
+      ])
+      ++ (
         # Notification manager
         let
           makoctl = lib.getExe' config.services.mako.package "makoctl";
@@ -75,8 +71,7 @@ in
           "$mod, w, exec, ${makoctl} dismiss"
         ]
       )
-      ++
-      (
+      ++ (
         # Launcher
         let
           wofi = lib.getExe config.programs.wofi.package;
@@ -91,4 +86,3 @@ in
     };
   };
 }
-

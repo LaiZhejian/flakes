@@ -1,17 +1,26 @@
 { inputs, ... }:
 
+let
+  override_package =
+    pkgs: package: package.override (builtins.intersectAttrs package.override.__functionArgs pkgs);
+in
 {
-  # This one brings our custom packages from the 'pkgs' directory
-  additions = final: _prev: import ../pkgs { pkgs = final; };
+  vscode-marketplace = inputs.nix-vscode-extensions.overlays.default;
+  nur = inputs.nur.overlays.default;
 
-  # This one contains whatever you want to overlay
-  # You can change versions, add patches, set compilation flags, anything really.
-  # https://wiki.nixos.org/wiki/Overlays
-  modifications = final: prev: {
-    # example = prev.example.overrideAttrs (oldAttrs: rec {
-    # ...
-    # });
-  };
+  myPackages =
+    final: prev:
+    inputs.nixpkgs.lib.packagesFromDirectoryRecursive {
+      callPackage = inputs.nixpkgs.lib.callPackageWith final;
+      directory = ../pkgs;
+    };
+
+  darwin =
+    final: prev:
+    prev.lib.optionalAttrs prev.stdenv.hostPlatform.isDarwin {
+      clash-verge-rev = final.darwinPkgs.clash-verge-rev;
+      sparkle = final.darwinPkgs.sparkle-bin;
+    };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'
@@ -22,5 +31,4 @@
     };
   };
 
-  nur = inputs.nur.overlays.default;
 }

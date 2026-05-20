@@ -1,10 +1,11 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.wezterm = {
     enable = true;
     extraConfig = ''
       return {
+        default_prog = { "${pkgs.fish}/bin/fish" },
         font = wezterm.font_with_fallback({
           "Cascadia Code NF",
           "CaskaydiaCove Nerd Font",

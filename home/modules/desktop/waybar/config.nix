@@ -1,8 +1,27 @@
 {
   mainBar = {
-    modules-left = [ "sway/workspaces" "sway/mode" "sway/scratchpad" "custom/media" ];
+    modules-left = [
+      "sway/workspaces"
+      "sway/mode"
+      "sway/scratchpad"
+      "custom/media"
+    ];
     modules-center = [ "sway/window" ];
-    modules-right = [ "mpd" "idle_inhibitor" "temperature" "cpu" "memory" "network" "pulseaudio" "backlight" "keyboard-state" "battery" "battery#bat2" "tray" "clock" ];
+    modules-right = [
+      "mpd"
+      "idle_inhibitor"
+      "temperature"
+      "cpu"
+      "memory"
+      "network"
+      "pulseaudio"
+      "backlight"
+      "keyboard-state"
+      "battery"
+      "battery#bat2"
+      "tray"
+      "clock"
+    ];
 
     "keyboard-state" = {
       numlock = true;
@@ -21,7 +40,10 @@
     "sway/scratchpad" = {
       format = "{icon} {count}";
       "show-empty" = false;
-      "format-icons" = [ "" "" ];
+      "format-icons" = [
+        ""
+        ""
+      ];
       tooltip = true;
       "tooltip-format" = "{app}: {title}";
     };
@@ -87,12 +109,26 @@
       "critical-threshold" = 80;
       "format-critical" = "{icon} {temperatureC}°C";
       format = "{icon} {temperatureC}°C";
-      "format-icons" = [ "" "" "" ];
+      "format-icons" = [
+        ""
+        ""
+        ""
+      ];
     };
 
     backlight = {
       format = "{icon} {percent}%";
-      "format-icons" = [ "" "" "" "" "" "" "" "" "" ];
+      "format-icons" = [
+        ""
+        ""
+        ""
+        ""
+        ""
+        ""
+        ""
+        ""
+        ""
+      ];
     };
 
     battery = {
@@ -104,7 +140,13 @@
       "format-charging" = "󰂄 {capacity}%";
       "format-plugged" = " {capacity}%";
       "format-alt" = "{icon} {time}";
-      "format-icons" = [ "" "" "" "" "" ];
+      "format-icons" = [
+        ""
+        ""
+        ""
+        ""
+        ""
+      ];
     };
 
     "battery#bat2" = {
@@ -129,7 +171,11 @@
       "format-source" = "{volume}%";
       "format-source-muted" = "";
       "format-icons" = {
-        "default" = [ "" "" "" ];
+        "default" = [
+          ""
+          ""
+          ""
+        ];
       };
       "on-click" = "pavucontrol";
       "on-click-right" = "foot -a pw-top pw-top";
