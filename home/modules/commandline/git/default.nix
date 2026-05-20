@@ -44,9 +44,10 @@ in
           column.ui = "auto";
           branch.sort = "committerdate";
           safe.directory = "*";
+        }
       ];
-    };
 
+    };
     programs.difftastic = {
       enable = true;
       git.enable = false;

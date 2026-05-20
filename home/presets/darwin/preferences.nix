@@ -21,6 +21,16 @@
         DSDontWriteNetworkStores = true;
         DSDontWriteUSBStores = true;
       };
+
+      # Natural scrolling
+      NSGlobalDomain = {
+        com.apple.swipescrolldirection = true;
+      };
+
+      # Auto-hide Dock
+      "com.apple.dock" = {
+        autohide = true;
+      };
     };
   };
 

@@ -18,7 +18,7 @@
   # Allow sudo authentication with Touch ID
   security.pam.services.sudo_local.touchIdAuth = true;
 
-  hostSpec.users.dream.homeConfiguration = lib.custom.fromFlakeRoot "home/top/darwin/darwin-a.nix";
+  hostSpec.users.dream.homeConfiguration = lib.custom.fromFlakeRoot "home/top/darwin/darwin-b.nix";
 
   # nix integration for zsh and fish
   programs.zsh.enable = true;
