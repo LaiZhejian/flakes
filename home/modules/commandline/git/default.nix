@@ -10,9 +10,6 @@ in
   config = {
     programs.git = {
       enable = true;
-      userName = "Jackie_Lai";
-      userEmail = "742949301@qq.com";
-
       ignores = [
         ".cache"
         "compile_commands.json"
@@ -26,8 +23,8 @@ in
 
       settings = lib.mkMerge [
         {
-          user.name = "Undefined01";
-          user.email = "amoscr@163.com";
+          user.name = "Jackie_Lai";
+          user.email = "742949301@qq.com";
 
           alias = {
             graph = "log --all --decorate --oneline --graph";

@@ -29,7 +29,6 @@
       # "thunderbird" # installed by nix
       # "zotero" # installed by nix
       # "zerotier-one"
-      "tencent-meeting"
       "1password-cli"
       "keyboardcleantool"
       "surge"
