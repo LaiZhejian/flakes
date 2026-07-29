@@ -1,6 +1,11 @@
 keys:
   - &lh age1c3fnsxugftwvjwmmsxz6ff4xaqsg97salhzmjfrmxd6uh5ajzacq99cmtq
+  - &dream age1lcyp98hyzxsur9ytndzvtsfzzczkt8qfm70trm7glekxcjlm09qssm09yc
 creation_rules:
+  - path_regex: hosts/dream/secrets/.*
+    key_groups:
+    - age:
+      - *dream
   - path_regex: /lh/
     key_groups:
     - age:

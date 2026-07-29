@@ -1,0 +1,22 @@
+{
+  "Profiles": [
+    {
+      "Name": "Dream",
+      "Guid": "8A0239C2-BBD9-4999-A844-DAA9F9E6D805",
+      "Dynamic Profile Parent Name": "Default",
+      "Command": "/etc/profiles/per-user/dream/bin/fish",
+      "Custom Command": "Yes",
+      "Working Directory": "/Users/dream",
+      "Normal Font": "FiraMonoNFP-Regular 14",
+      "Non Ascii Font": "Monaco 12",
+      "Use Non-ASCII Font": false,
+      "Scrollback Lines": 1000,
+      "Unlimited Scrollback": false,
+      "Use Bold Font": true,
+      "Use Bright Bold": true,
+      "Silence Bell": false,
+      "Visual Bell": true,
+      "Close Sessions On End": true
+    }
+  ]
+}

@@ -84,6 +84,8 @@
         ```
         You may need `killall Dock` or system reboot to make the system preference changes take effect.
 
+    > **Dream bootstrap:** clone `https://github.com/LaiZhejian/flakes` with submodules, copy the age identity to `~/.config/sops/age/keys.txt` with mode `0600`, then run the command above with `#dream` (or `#dream-bytedance`).
+
 You can configure a new host by copying an existing host under `hosts/`.
 
 ## Known Issues

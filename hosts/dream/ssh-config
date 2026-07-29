@@ -1,0 +1,162 @@
+Host github.com
+    Hostname ssh.github.com
+    User git
+    Port 443
+    PreferredAuthentications publickey
+    IdentityFile ~/.ssh/exp_server
+    ServerAliveInterval 20
+
+Host WSL
+    HostName 172.26.81.179
+    User dream
+    Port 22
+    RemoteForward 20086 127.0.0.1:6152
+
+Host THU-3090-1
+    HostName 10.103.10.151
+    User jjsong
+    Port 8001
+    RemoteForward 20086 127.0.0.1:6152
+    IdentityFile ~/.ssh/exp_server
+
+Host THU-3090-2
+    HostName 10.103.10.151
+    User jjsong
+    Port 8002
+    RemoteForward 20086 127.0.0.1:6152
+    IdentityFile ~/.ssh/exp_server
+
+Host THU-V100
+    HostName 10.103.10.151
+    User jjsong
+    Port 8004
+    RemoteForward 20086 127.0.0.1:6152
+    IdentityFile ~/.ssh/exp_server
+
+Host 3090Ti-1
+    HostName 210.28.135.34
+    User laizj
+    RemoteForward 20086 127.0.0.1:6152
+    ProxyCommand nc -X connect -x 127.0.0.1:8888 %h %p
+    IdentityFile ~/.ssh/exp_server
+
+Host A6000*
+    RemoteForward 20086 127.0.0.1:6152
+    IdentityFile ~/.ssh/exp_server
+    ProxyCommand nc -X connect -x 127.0.0.1:8888 %h %p
+
+Host A6000-1
+    HostName 210.28.134.54
+    User laizj
+
+Host A6000-2
+    HostName 210.28.134.55
+    User laizj
+
+Host A6000-3
+    HostName 210.28.134.152
+    User laizj
+
+Host A6000-4
+    HostName 210.28.135.91
+    User laizj
+
+Host A6000-5
+    HostName 114.212.190.34
+    User laizj
+
+Host A6000-6
+    HostName 114.212.190.51
+    User laizj
+
+Host V100*
+    RemoteForward 20086 127.0.0.1:6152
+    IdentityFile ~/.ssh/exp_server
+
+Host V100-01
+    HostName 210.28.133.13
+    Port 20080
+    User laizj
+
+Host V100-02
+    HostName 210.28.133.13
+    Port 20687
+    User laizj
+
+Host V100-03
+    HostName 210.28.133.13
+    Port 20227
+    User laizj
+
+Host V100-11
+    HostName 210.28.133.13
+    Port 20638
+    User laizj
+
+Host V100-12
+    HostName 210.28.133.13
+    Port 20658
+    User laizj
+
+Host V100-13
+    HostName 210.28.133.13
+    Port 20659
+    User laizj
+
+Host V100-21
+    HostName 210.28.133.13
+    Port 20641
+    User laizj
+
+Host V100-22
+    HostName 210.28.133.13
+    Port 20644
+    User laizj
+
+Host V100-23
+    HostName 210.28.133.13
+    Port 20642
+    User laizj
+
+Host V100-31
+    HostName 210.28.133.13
+    Port 20645
+    User laizj
+
+Host V100-32
+    HostName 210.28.133.13
+    Port 20646
+    User laizj
+
+Host V100-33
+    HostName 210.28.133.13
+    Port 22170
+    User laizj
+
+Host V100-51
+    HostName 210.28.133.13
+    Port 21469
+    User laizj
+
+Host V100-52
+    HostName 210.28.133.13
+    Port 21472
+    User laizj
+
+Host 2080Ti-1
+    HostName 210.28.132.174
+    User laizj
+    RemoteForward 20086 127.0.0.1:6152
+    IdentityFile ~/.ssh/exp_server
+
+Host 2080Ti-2
+    HostName 210.28.132.175
+    User laizj
+    RemoteForward 20086 127.0.0.1:6152
+    IdentityFile ~/.ssh/exp_server
+
+Host Titan-1
+    HostName 114.212.189.235
+    User laizj
+    RemoteForward 20086 127.0.0.1:6152
+    IdentityFile ~/.ssh/exp_server

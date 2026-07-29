@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          submodules: recursive
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
@@ -61,6 +63,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v6
+      with:
+        submodules: recursive
 
     - name: Install Nix
       uses: cachix/install-nix-action@v31
@@ -97,6 +101,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v6
+      with:
+        submodules: recursive
 
     - name: Install Nix
       uses: cachix/install-nix-action@v31
@@ -127,7 +133,9 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
+      with:
+        submodules: recursive
 
     - name: Install Nix
       uses: cachix/install-nix-action@v31
@@ -151,7 +159,9 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
+      with:
+        submodules: recursive
 
     - name: Install Nix
       uses: cachix/install-nix-action@v31
