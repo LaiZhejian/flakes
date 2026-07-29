@@ -37,10 +37,12 @@ in
 
   # ---- homebrew casks (replace upstream's) ----
   homebrew.casks = lib.mkForce (
-    lib.optionals isPersonalDarwin [
-      "1password-cli"
+    [
       "alfred"
       "iterm2"
+    ]
+    ++ lib.optionals isPersonalDarwin [
+      "1password-cli"
       "keyboardcleantool"
       "surge"
     ]
