@@ -9,14 +9,17 @@
 
 let
   isPersonalDarwin = hostMeta.username == "dream";
-  vscodeCliOnly = pkgs.runCommand "vscode-cli-${pkgs.vscode.version}" {
-    pname = "vscode-cli";
-    inherit (pkgs.vscode) version;
-    meta.mainProgram = "code";
-  } ''
-    mkdir -p "$out/bin"
-    ln -s ${lib.getExe pkgs.vscode} "$out/bin/code"
-  '';
+  vscodeCliOnly =
+    pkgs.runCommand "vscode-cli-${pkgs.vscode.version}"
+      {
+        pname = "vscode-cli";
+        inherit (pkgs.vscode) version;
+        meta.mainProgram = "code";
+      }
+      ''
+        mkdir -p "$out/bin"
+        ln -s ${lib.getExe pkgs.vscode} "$out/bin/code"
+      '';
 in
 {
   imports = [
