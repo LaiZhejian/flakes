@@ -33,14 +33,6 @@ in
       };
     }
     // lib.optionalAttrs isPersonalDarwin {
-      # Alfred reads a host-managed preference set instead of using iCloud.
-      "com.runningwithcrayons.Alfred-Preferences" = {
-        syncfolder = "~/.config/alfred";
-      };
-      "com.runningwithcrayons.Alfred" = {
-        "appearance.screen" = 0;
-      };
-
       # Stable iTerm2 application preferences. Profiles are managed separately
       # through a Dynamic Profile in hosts/dream/iterm2-profile.json.
       "com.googlecode.iterm2" = {
@@ -48,7 +40,7 @@ in
         CopySelection = true;
         OpenArrangementAtStartup = false;
         SUEnableAutomaticChecks = true;
-        "Default Bookmark Guid" = "8A0239C2-BBD9-4999-A844-DAA9F9E6D805";
+        "Default Bookmark Guid" = "ED2D5D5A-4C80-456B-8329-23C9FA09374C";
       };
 
       "com.hegenberg.KeyboardCleanTool" = {

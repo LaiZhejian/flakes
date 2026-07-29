@@ -41,6 +41,26 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zsh-autosuggestions = {
+      url = "github:zsh-users/zsh-autosuggestions/85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5";
+      flake = false;
+    };
+    zsh-syntax-highlighting = {
+      url = "github:zsh-users/zsh-syntax-highlighting/5eb677bb0fa9a3e60f0eff031dc13926e093df92";
+      flake = false;
+    };
+    zsh-cmdtime = {
+      url = "github:tom-auger/cmdtime/ffc72641dcfa0ee6666ceb1dc712b61be30a1e8b";
+      flake = false;
+    };
+    zsh-fzf-tab = {
+      url = "github:Aloxaf/fzf-tab/fac145167f7ec1861233c54de0c8900b09c650fe";
+      flake = false;
+    };
+    zsh-fzf-ls = {
+      url = "github:ezh/fzf-ls/956de07f1f3f14f825cc8feb8d7491ef01edcac1";
+      flake = false;
+    };
 
     # nix for darwin
     darwin = {

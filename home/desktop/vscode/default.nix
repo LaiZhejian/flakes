@@ -85,7 +85,6 @@ in
       usernamehw.errorlens
       mhutchie.git-graph
       formulahendry.code-runner
-      openai.chatgpt
       pkief.material-icon-theme
       zhuangtongfa.material-theme
       wakatime.vscode-wakatime

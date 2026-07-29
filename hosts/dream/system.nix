@@ -23,6 +23,7 @@ in
     ];
     homeConfiguration = lib.mkDefault ./home.nix;
   };
+  users.users.${hostMeta.username}.shell = pkgs.fish;
 
   # ---- fonts: nerd-fonts fira-mono ----
   fonts.packages = lib.mkForce (
@@ -40,6 +41,8 @@ in
     [
       "alfred"
       "iterm2"
+      "visual-studio-code"
+      "zotero"
     ]
     ++ lib.optionals isPersonalDarwin [
       "1password-cli"

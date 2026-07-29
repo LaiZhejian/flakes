@@ -1,6 +1,7 @@
 {
   config,
   hostMeta,
+  inputs,
   lib,
   pkgs,
   ...
@@ -8,13 +9,20 @@
 
 let
   isPersonalDarwin = hostMeta.username == "dream";
+  vscodeCliOnly = pkgs.runCommand "vscode-cli-${pkgs.vscode.version}" {
+    pname = "vscode-cli";
+    inherit (pkgs.vscode) version;
+    meta.mainProgram = "code";
+  } ''
+    mkdir -p "$out/bin"
+    ln -s ${lib.getExe pkgs.vscode} "$out/bin/code"
+  '';
 in
 {
   imports = [
     ./darwin-preferences.nix
   ]
   ++ lib.optionals isPersonalDarwin [
-    ./alfred
     ./secrets
   ];
 
@@ -26,15 +34,7 @@ in
   # ---- profiles ----
   custom.home.profiles.commandline.enable = true;
   custom.home.profiles.darwin.enable = true;
-  custom.home.profiles.darwin.packages = lib.mkForce (
-    lib.optionals isPersonalDarwin (
-      with pkgs;
-      [
-        qq
-        wechat
-      ]
-    )
-  );
+  custom.home.profiles.darwin.packages = lib.mkForce [ ];
 
   # ---- desktop applications ----
   custom.home.stacks.desktop.aerospace.enable = lib.mkForce false;
@@ -42,7 +42,8 @@ in
   custom.home.stacks.desktop.firefox.enable = lib.mkForce false;
   custom.home.stacks.desktop.thunderbird.enable = lib.mkForce false;
   custom.home.stacks.desktop.vscode.enable = lib.mkForce isPersonalDarwin;
-  custom.home.stacks.desktop.zotero.enable = lib.mkForce isPersonalDarwin;
+  custom.home.stacks.desktop.zotero.enable = lib.mkForce false;
+  programs.vscode.package = lib.mkForce vscodeCliOnly;
 
   # ---- commandline tools ----
   custom.home.stacks.commandline.editor.variant = lib.mkForce "none"; # 关闭nvim
@@ -115,12 +116,12 @@ in
     );
   };
 
-  home.file.zsh-plugins = {
-    enable = true;
-    source = ../../home/commandline/zsh/plugins;
-    target = ".local/zsh_plugins/plugins";
-    recursive = true;
-  };
+  home.file.".local/zsh_plugins/plugins/cmdtime".source = inputs.zsh-cmdtime;
+  home.file.".local/zsh_plugins/plugins/fzf-ls".source = inputs.zsh-fzf-ls;
+  home.file.".local/zsh_plugins/plugins/fzf-tab".source = inputs.zsh-fzf-tab;
+  home.file.".local/zsh_plugins/plugins/zsh-autosuggestions".source = inputs.zsh-autosuggestions;
+  home.file.".local/zsh_plugins/plugins/zsh-syntax-highlighting".source =
+    inputs.zsh-syntax-highlighting;
 
   home.file.".ssh/config.d/config" = lib.mkIf isPersonalDarwin {
     source = ./ssh-config;
@@ -129,7 +130,9 @@ in
   home.file."Library/Application Support/iTerm2/DynamicProfiles/dream.json" =
     lib.mkIf isPersonalDarwin
       {
-        source = ./iterm2-profile.json;
+        text = lib.replaceStrings [ "/Users/dream" ] [ config.home.homeDirectory ] (
+          builtins.readFile ./iterm2-profile.json
+        );
       };
 
   # ---- fish: shellInit ----
