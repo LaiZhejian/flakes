@@ -29,9 +29,13 @@ Completed after the initial inventory:
   enabled; LSP and rclone are disabled; GitUI is the only Git UI. Codex, VS
   Code, Zotero, QQ, WeChat, and the three Homebrew casks are limited to the
   personal Dream host and are not enabled on Dream's ByteDance host.
+- Fixed shared CI compatibility by checking out submodules recursively,
+  removing unsupported `?shallow=1` flake URL parameters, and using the
+  runner-provided `jq` for matrix generation.
 
 The remaining non-host differences are limited to machine-local Claude
-settings, `.DS_Store` ignore policy, and Dream's Zsh plugin sources.
+settings, CI compatibility, `.DS_Store` ignore policy, and Dream's Zsh plugin
+sources.
 
 ## Summary
 

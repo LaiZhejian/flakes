@@ -31,7 +31,6 @@ jobs:
 
       - name: Define Configuration Matrix
         id: jobs
-        shell: nix shell nixpkgs#jq --command bash {0}
         run: |
           set -euo pipefail
 
