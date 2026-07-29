@@ -3,7 +3,6 @@
 {
   programs.vscode.profiles.default = {
     extensions = with pkgs.vscode-marketplace; [
-      vscjava.vscode-java-pack
       redhat.java
       vscjava.vscode-gradle
       vscjava.vscode-java-debug
@@ -21,7 +20,7 @@
       };
 
       "remote.SSH.defaultExtensions" = [
-        "vscjava.vscode-java-pack"
+        "redhat.java"
         "vscjava.vscode-gradle"
       ];
     };

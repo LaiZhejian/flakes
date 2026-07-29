@@ -207,11 +207,11 @@ in
       "workbench.editor.empty.hint" = "hidden";
       "workbench.layoutControl.enabled" = false;
 
-      "explorer.confirmDelete" = false;
+      "explorer.confirmDelete" = true;
       "explorer.compactFolders" = false;
       "explorer.confirmPasteNative" = false;
 
-      "editor.accessibilitySupport" = "off";
+      "editor.accessibilitySupport" = "auto";
       "editor.fontSize" = 13;
       "editor.fontFamily" =
         "FiraCode Nerd Font Mono, JetBrains Mono NL, Consolas, 'Courier New', monospace";
@@ -248,16 +248,6 @@ in
       "python.analysis.inlayHints.functionReturnTypes" = true;
       "python.analysis.typeCheckingMode" = "standard";
 
-      "C_Cpp.formatting" = "vcFormat";
-      "C_Cpp.default.cStandard" = "c17";
-      "C_Cpp.default.cppStandard" = "c++20";
-
-      "github.copilot.enable" = {
-        "*" = false;
-        plaintext = false;
-        markdown = false;
-        scminput = false;
-      };
     };
 
     keybindings = lib.mkAfter [

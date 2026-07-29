@@ -37,7 +37,6 @@ in
     ./lang-python.nix
     ./lang-rust.nix
     ./env-nix.nix
-    ./clang-format.nix
   ];
 
   options.custom = {
@@ -83,22 +82,16 @@ in
     customize.vscode.extensions.include = with marketplace; [
       smcpeak.default-keys-windows
       ms-vscode.hexeditor
-      alefragnani.bookmarks
       usernamehw.errorlens
-      eamodio.gitlens
+      mhutchie.git-graph
+      formulahendry.code-runner
+      openai.chatgpt
+      pkief.material-icon-theme
+      zhuangtongfa.material-theme
       wakatime.vscode-wakatime
       tamasfe.even-better-toml
-      pflannery.vscode-versionlens
-      grapecity.gc-excelviewer
-      tomoki1207.pdf
 
       ms-vscode-remote.remote-ssh
-      ms-vscode-remote.remote-ssh-edit
-      ms-vscode.remote-explorer
-      ms-vscode.remote-server
-      ms-kubernetes-tools.vscode-kubernetes-tools
-
-      github.copilot-chat
     ];
 
     # Replace the immutable settings.json to mutable one.
@@ -136,13 +129,6 @@ in
             mouseWheelZoom = true;
           })
           // {
-            "github.copilot.enable" = {
-              "*" = true;
-              "plaintext" = true;
-              "markdown" = true;
-            };
-            "github.copilot.nextEditSuggestions.enabled" = true;
-
             "remote.SSH.configFile" = "${config.home.homeDirectory}/.vscode/remote-ssh-config";
             "settingsSync.ignoredSettings" = [
               "remote.SSH.configFile"
@@ -153,7 +139,7 @@ in
             "extensions.autoUpdate" = false;
 
             "git.confirmSync" = false;
-            "explorer.confirmDragAndDrop" = false;
+            "explorer.confirmDragAndDrop" = true;
             "explorer.confirmDelete" = false;
             "terminal.integrated.enableMultiLinePasteWarning" = "never";
             "diffEditor.ignoreTrimWhitespace" = false;
@@ -168,9 +154,6 @@ in
               "editor.defaultFormatter" = "vscode.json-language-features";
             };
           }
-          // (addPrefix "gitlens" {
-            "graph.layout" = "editor";
-          })
           // (addPrefix "terminal.integrated" {
             accessibleViewPreserveCursorPosition = true;
             "defaultProfile.linux" = "fish";

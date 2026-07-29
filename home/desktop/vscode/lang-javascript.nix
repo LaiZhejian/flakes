@@ -4,7 +4,6 @@
   programs.vscode.profiles.default = {
     extensions = with pkgs.vscode-marketplace; [
       dbaeumer.vscode-eslint
-      esbenp.prettier-vscode
     ];
 
     userSettings = {
