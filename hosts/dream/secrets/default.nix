@@ -26,13 +26,9 @@ in
     secrets = lib.genAttrs secretNames (_: { }) // {
       SSH_ID_RSA = {
         sopsFile = ./ssh-keys.yaml;
-        path = "${config.home.homeDirectory}/.ssh/id_rsa";
-        mode = "0600";
       };
       SSH_EXP_SERVER = {
         sopsFile = ./ssh-keys.yaml;
-        path = "${config.home.homeDirectory}/.ssh/exp_server";
-        mode = "0600";
       };
     };
 
@@ -70,6 +66,22 @@ in
           user_pref("extensions.zotero.zoterogpt.secretKey", "${secret "ZOTERO_GPT_API_KEY"}");
           user_pref("extensions.zotero.zoterogpt.embeddings.secretKey", "${secret "ZOTERO_GPT_EMBEDDINGS_API_KEY"}");
           user_pref("extensions.zotero.zoterostyle.easyscholar.secretKey", "${secret "ZOTERO_EASYSCHOLAR_API_KEY"}");
+        '';
+      };
+
+      "ssh-id-rsa" = {
+        path = "${config.home.homeDirectory}/.ssh/id_rsa";
+        mode = "0600";
+        content = ''
+          ${secret "SSH_ID_RSA"}
+        '';
+      };
+
+      "ssh-exp-server" = {
+        path = "${config.home.homeDirectory}/.ssh/exp_server";
+        mode = "0600";
+        content = ''
+          ${secret "SSH_EXP_SERVER"}
         '';
       };
     };

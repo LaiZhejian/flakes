@@ -3,7 +3,8 @@ Host github.com
     User git
     Port 443
     PreferredAuthentications publickey
-    IdentityFile ~/.ssh/exp_server
+    IdentityFile ~/.ssh/id_rsa
+    IdentitiesOnly yes
     ServerAliveInterval 20
 
 Host WSL
