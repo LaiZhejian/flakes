@@ -50,41 +50,12 @@ in
   custom.home.stacks.commandline.git.ui = lib.mkForce "gitui";
   custom.home.stacks.commandline.shell.starship.enable = lib.mkForce true;
   custom.home.stacks.commandline.rclone.enable = lib.mkForce false;
-  custom.home.stacks.commandline.claudecode.enable = lib.mkForce true;
-  custom.home.stacks.commandline.codex.enable = lib.mkForce isPersonalDarwin;
+  custom.home.stacks.commandline.claudecode.enable = lib.mkForce false;
+  custom.home.stacks.commandline.codex.enable = lib.mkForce false;
 
-  # Claude Code is installed declaratively, while each machine keeps its own
-  # account state and settings instead of inheriting upstream's declared JSON.
-  home.mutableFile = {
-    ".claude.json".ownership.default = lib.mkForce "local";
-    ".claude/settings.json".ownership.default = lib.mkForce "local";
-  }
-  // lib.optionalAttrs isPersonalDarwin {
-    # Preserve Codex desktop/CLI-generated state locally. The shared module
-    # still supplies stable defaults for keys not covered by these sections.
-    ".codex/config.toml".ownership.rules = lib.mkAfter [
-      {
-        path = [ "marketplaces" ];
-        mode = "local";
-      }
-      {
-        path = [ "plugins" ];
-        mode = "local";
-      }
-      {
-        path = [ "features" ];
-        mode = "local";
-      }
-      {
-        path = [ "desktop" ];
-        mode = "local";
-      }
-      {
-        path = [ "shell_environment_policy" ];
-        mode = "local";
-      }
-    ];
-  };
+  # Claude Code and Codex are installed below without enabling their shared
+  # configuration modules, so each machine retains its existing account,
+  # provider, plugin, and application state.
 
   # ---- cli packages: replace zellij+osc with tmux ----
   custom.home.profiles.commandline.packages = lib.mkForce (
@@ -315,7 +286,10 @@ in
   };
 
   # ---- extra packages ----
-  home.packages = with pkgs; [
-    kubectl
-  ];
+  home.packages =
+    (with pkgs; [
+      claude-code
+      kubectl
+    ])
+    ++ lib.optionals isPersonalDarwin [ pkgs.codex ];
 }

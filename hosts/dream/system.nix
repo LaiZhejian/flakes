@@ -13,6 +13,9 @@ in
   custom.system.profiles.minimal.enable = true;
   custom.system.stacks.homebrew.enable = true;
 
+  # Preserve pre-Nix files the first time Home Manager takes ownership.
+  home-manager.backupFileExtension = "hm-backup";
+
   custom.system.users.${hostMeta.username} = {
     name = hostMeta.username;
     authorizedKeys = [
