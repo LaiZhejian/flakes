@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Dream's Flake Secrets Bootstrap",
+  "version": "1.0.0",
+  "description": "Loads the SOPS-managed WebDAV password into Zotero's login manager.",
+  "applications": {
+    "zotero": {
+      "id": "zotero-flake-secrets@dream",
+      "strict_min_version": "7.0",
+      "strict_max_version": "10.*"
+    }
+  }
+}

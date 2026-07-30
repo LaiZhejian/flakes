@@ -12,6 +12,12 @@ let
     "ZOTERO_EASYSCHOLAR_API_KEY"
     "ZOTERO_GPT_API_KEY"
     "ZOTERO_GPT_EMBEDDINGS_API_KEY"
+    "ZOTERO_PDF_TRANSLATE_CNKI_TOKEN"
+    "ZOTERO_PDF_TRANSLATE_SECRET_OBJ"
+    "ZOTERO_USERNAME"
+    "ZOTERO_WEBDAV_PASSWORD"
+    "ZOTERO_WEBDAV_URL"
+    "ZOTERO_WEBDAV_USERNAME"
   ];
   secret = name: config.sops.placeholder.${name};
 in
@@ -63,10 +69,81 @@ in
       "zotero-secrets.js" = {
         mode = "0400";
         content = ''
+          user_pref("extensions.zotero.flake.secretDirectory", "${config.home.homeDirectory}/.config/secrets/zotero");
+
+          user_pref("extensions.zotero.sync.storage.protocol", "webdav");
+          user_pref("extensions.zotero.automaticTags", false);
+          user_pref("extensions.zotero.export.quickCopy.locale", "zh-CN");
+          user_pref("extensions.zotero.export.translatorSettings", "{\"exportCharset\":\"UTF-8\",\"exportNotes\":false,\"exportFileData\":false,\"useJournalAbbreviation\":false,\"includeAnnotations\":false}");
+          user_pref("extensions.zotero.groups.copyChildFileAttachments", false);
+          user_pref("extensions.zotero.groups.copyTags", false);
+          user_pref("extensions.zotero.itemPaneHeader", "bibEntry");
+
+          user_pref("extensions.jasminum.attachment", "pdf");
+          user_pref("extensions.jasminum.citefield", "extra");
+          user_pref("extensions.jasminum.disableZoteroOutline", false);
+          user_pref("extensions.jasminum.pdfmatchfolder", "${config.home.homeDirectory}/Downloads");
+
+          user_pref("extensions.zotero.ZoteroPDFTranslate.annotationTagContent", "Translation");
+          user_pref("extensions.zotero.ZoteroPDFTranslate.dictSource", "bingdict");
+          user_pref("extensions.zotero.ZoteroPDFTranslate.disabledLanguages", "zh,中文,中文;");
+          user_pref("extensions.zotero.ZoteroPDFTranslate.enableAuto", false);
+          user_pref("extensions.zotero.ZoteroPDFTranslate.enableHidePopupTextarea", true);
+          user_pref("extensions.zotero.ZoteroPDFTranslate.enableNote", false);
+          user_pref("extensions.zotero.ZoteroPDFTranslate.enablePopup", false);
+          user_pref("extensions.zotero.ZoteroPDFTranslate.targetLanguage", "zh-CN");
+          user_pref("extensions.zotero.ZoteroPDFTranslate.titleColumnMode", "result");
+          user_pref("extensions.zotero.ZoteroPDFTranslate.translateSource", "cnki");
+
+          user_pref("extensions.zotero.zoterogpt.api", "https://llmapi.paratera.com");
+          user_pref("extensions.zotero.zoterogpt.embeddings.api", "https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings");
+          user_pref("extensions.zotero.zoterogpt.embeddings.model", "text-embedding-v3");
           user_pref("extensions.zotero.zoterogpt.secretKey", "${secret "ZOTERO_GPT_API_KEY"}");
           user_pref("extensions.zotero.zoterogpt.embeddings.secretKey", "${secret "ZOTERO_GPT_EMBEDDINGS_API_KEY"}");
+          user_pref("extensions.zotero.zoterogpt.model", "DeepSeek-V3.2");
           user_pref("extensions.zotero.zoterostyle.easyscholar.secretKey", "${secret "ZOTERO_EASYSCHOLAR_API_KEY"}");
+          user_pref("extensions.zotero.zoterostyle.publicationTagsColumn.fields", "sciif, sci, CCF, utd24, ajg, sciBase, ssci, pku, 复合影响因子");
+
+          user_pref("extensions.updateifs.add-update", true);
+          user_pref("extensions.updateifs.ch-abbr", true);
+          user_pref("extensions.updateifs.en-abbr", true);
+          user_pref("extensions.zotfile.source_dir", "${config.home.homeDirectory}/Downloads");
+          user_pref("extensions.zotfile.source_dir_ff", false);
+          user_pref("extensions.zotfile.tablet", true);
+
+          user_pref("extensions.zotero.findPDFs.resolvers", "{\"name\":\"Sci-Hub\",\"method\":\"GET\",\"url\":\"https://sci-hub.shop/{doi}\",\"mode\":\"html\",\"selector\":\"#pdf\",\"attribute\":\"src\",\"automatic\":false}");
         '';
+      };
+
+      "zotero-username" = {
+        path = "${config.home.homeDirectory}/.config/secrets/zotero/username";
+        mode = "0400";
+        content = secret "ZOTERO_USERNAME";
+      };
+      "zotero-webdav-username" = {
+        path = "${config.home.homeDirectory}/.config/secrets/zotero/webdav-username";
+        mode = "0400";
+        content = secret "ZOTERO_WEBDAV_USERNAME";
+      };
+      "zotero-webdav-url" = {
+        path = "${config.home.homeDirectory}/.config/secrets/zotero/webdav-url";
+        mode = "0400";
+        content = secret "ZOTERO_WEBDAV_URL";
+      };
+      "zotero-webdav-password" = {
+        path = "${config.home.homeDirectory}/.config/secrets/zotero/webdav-password";
+        mode = "0400";
+        content = secret "ZOTERO_WEBDAV_PASSWORD";
+      };
+      "zotero-pdf-translate-cnki-token" = {
+        path = "${config.home.homeDirectory}/.config/secrets/zotero/pdf-translate-cnki-token";
+        mode = "0400";
+        content = secret "ZOTERO_PDF_TRANSLATE_CNKI_TOKEN";
+      };
+      "zotero-pdf-translate-secret-obj" = {
+        path = "${config.home.homeDirectory}/.config/secrets/zotero/pdf-translate-secret-obj";
+        mode = "0400";
+        content = secret "ZOTERO_PDF_TRANSLATE_SECRET_OBJ";
       };
 
       "ssh-id-rsa" = {

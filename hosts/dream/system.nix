@@ -56,6 +56,18 @@ in
 
   time.timeZone = "Asia/Shanghai";
 
+  # Keep this desktop Mac available for long-running jobs while on AC power.
+  system.activationScripts.postActivation.text = ''
+    pmset -a \
+      displaysleep 0 \
+      sleep 0 \
+      disksleep 10 \
+      powernap 1 \
+      womp 1 \
+      tcpkeepalive 1 \
+      ttyskeepawake 1
+  '';
+
   # nix integration for zsh and fish
   programs.zsh.enable = true;
   programs.fish.enable = true;

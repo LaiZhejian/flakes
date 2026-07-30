@@ -23,7 +23,9 @@ let
 in
 {
   imports = [
+    ./alfred
     ./darwin-preferences.nix
+    ./zotero
   ]
   ++ lib.optionals isPersonalDarwin [
     ./secrets
