@@ -6,6 +6,9 @@
   ...
 }:
 
+let
+  sshPublicKeys = import ./ssh-public-keys.nix;
+in
 {
   custom.system.profiles.minimal.enable = true;
   custom.system.stacks.homebrew.enable = true;
@@ -16,7 +19,7 @@
   custom.system.users.${hostMeta.username} = {
     name = hostMeta.username;
     authorizedKeys = [
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChzmtriHxELNCSVh+FTn/pWAbSwN99T2Ui/Fm0D8UEgnn1JDuwhKylDjlOJfeI62+PeYOucRKchz8TB5mGqj3yzpQqklyGEeWsnEno9JzgJEdSgXBJlndG05s0S9ugXH2ThedGPz1w6CKBe00rF36nNZErEN8Lrg9NVFbwYv5bHakWd4B+ACUMktUAYEVfWL8N+mLMiWMbNa5eW8pg/NE2m6b9D2zTedpiQtNaJfnxSH/GE/7ybfNTsa1Qe3iYFKi8IjHVmiJRrUyaoPFKBA5ltPLvHEkYmTIRHVJ4GZGVtQNfWycJcF0NHpYh3MVUaADvLJ3mlu+MNz2WON4dR3xbuk+Huv78CMo5VaDwmpUzmX2ctV9Zf//JJNtvjPJu4cs50YI3Td/8gSBhY1V7vV3tjfeIwBMr/77RhVyBvWO/y1y46ic8glOufC+L1FRCLBCPxN1Eq9UjuiXe2mb2GAt1ML2Je9DFXYv9LMxRQ0GPXc7Z3QfPCW21/lAG3eYQhRs= jackie_laichn@163.com"
+      sshPublicKeys.idRsa
     ];
     homeConfiguration = lib.mkDefault ./home.nix;
   };
@@ -34,17 +37,15 @@
   );
 
   # ---- homebrew casks (replace upstream's) ----
-  homebrew.casks = lib.mkForce (
-    [
-      "1password-cli"
-      "alfred"
-      "iterm2"
-      "keyboardcleantool"
-      "surge"
-      "visual-studio-code"
-      "zotero"
-    ]
-  );
+  homebrew.casks = lib.mkForce ([
+    "1password-cli"
+    "alfred"
+    "iterm2"
+    "keyboardcleantool"
+    "surge"
+    "visual-studio-code"
+    "zotero"
+  ]);
 
   # Allow sudo authentication with Touch ID
   security.pam.services.sudo_local.touchIdAuth = true;
@@ -61,6 +62,18 @@
       womp 1 \
       tcpkeepalive 1 \
       ttyskeepawake 1
+
+    # nix-darwin does not update Directory Service for pre-existing users that
+    # are intentionally absent from users.knownUsers. Keep their login shell
+    # aligned with this configuration without attempting to recreate them.
+    if /usr/bin/dscl . -read "/Users/${hostMeta.username}" >/dev/null 2>&1; then
+      current_shell=$(/usr/bin/dscl . -read "/Users/${hostMeta.username}" UserShell \
+        | /usr/bin/awk '{ print $2 }')
+      if [ "$current_shell" != "/run/current-system/sw/bin/fish" ]; then
+        /usr/bin/dscl . -create "/Users/${hostMeta.username}" UserShell \
+          /run/current-system/sw/bin/fish
+      fi
+    fi
   '';
 
   # nix integration for zsh and fish

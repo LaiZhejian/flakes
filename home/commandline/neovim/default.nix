@@ -15,8 +15,10 @@
       withPython3 = false;
     };
 
-    xdg.configFile.nvim = lib.mkIf (builtins.pathExists ./nvim-config) {
-      source = ./nvim-config;
-    };
+    xdg.configFile.nvim =
+      lib.mkIf (builtins.pathExists ./nvim-config && builtins.readDir ./nvim-config != { })
+        {
+          source = ./nvim-config;
+        };
   };
 }

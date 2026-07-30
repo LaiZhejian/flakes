@@ -1,4 +1,0 @@
-#:schema https://developers.openai.com/codex/config-schema.json
-
-# Intentionally empty: mutable-home-files preserves this host's local Codex
-# model, provider, plugin, hook, project and MCP configuration.
