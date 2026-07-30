@@ -6,9 +6,6 @@
   ...
 }:
 
-let
-  isPersonalDarwin = hostMeta.username == "dream";
-in
 {
   custom.system.profiles.minimal.enable = true;
   custom.system.stacks.homebrew.enable = true;
@@ -39,15 +36,13 @@ in
   # ---- homebrew casks (replace upstream's) ----
   homebrew.casks = lib.mkForce (
     [
+      "1password-cli"
       "alfred"
       "iterm2"
-      "visual-studio-code"
-      "zotero"
-    ]
-    ++ lib.optionals isPersonalDarwin [
-      "1password-cli"
       "keyboardcleantool"
       "surge"
+      "visual-studio-code"
+      "zotero"
     ]
   );
 

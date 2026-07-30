@@ -6,9 +6,6 @@
   ...
 }:
 
-let
-  isPersonalDarwin = hostMeta.username == "dream";
-in
 {
   targets.darwin = lib.mkIf pkgs.stdenv.isDarwin {
     defaults = {
@@ -134,7 +131,7 @@ in
         AppleSymbolicHotKeys = builtins.fromJSON (builtins.readFile ./symbolic-hotkeys.json);
       };
     }
-    // lib.optionalAttrs isPersonalDarwin {
+    // {
       "com.googlecode.iterm2" = {
         PromptOnQuit = true;
         CopySelection = true;

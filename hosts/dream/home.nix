@@ -8,7 +8,6 @@
 }:
 
 let
-  isPersonalDarwin = hostMeta.username == "dream";
   vscodeCliOnly =
     pkgs.runCommand "vscode-cli-${pkgs.vscode.version}"
       {
@@ -25,10 +24,8 @@ in
   imports = [
     ./alfred
     ./darwin-preferences.nix
-    ./zotero
-  ]
-  ++ lib.optionals isPersonalDarwin [
     ./secrets
+    ./zotero
   ];
 
   # Keep all owner-specific state in this host. Shared modules under home/
@@ -46,7 +43,7 @@ in
   custom.home.stacks.desktop.wezterm.enable = lib.mkForce false;
   custom.home.stacks.desktop.firefox.enable = lib.mkForce false;
   custom.home.stacks.desktop.thunderbird.enable = lib.mkForce false;
-  custom.home.stacks.desktop.vscode.enable = lib.mkForce isPersonalDarwin;
+  custom.home.stacks.desktop.vscode.enable = lib.mkForce true;
   custom.home.stacks.desktop.zotero.enable = lib.mkForce false;
   programs.vscode.package = lib.mkForce vscodeCliOnly;
 
@@ -116,6 +113,8 @@ in
           plugins=(zsh-autosuggestions zsh-syntax-highlighting cmdtime fzf-tab fzf-ls)
           source "$ZSH/oh-my-zsh.sh"
         fi
+        [[ -r "${config.home.homeDirectory}/.config/secrets/zotero/api.sh" ]] && \
+          source "${config.home.homeDirectory}/.config/secrets/zotero/api.sh"
       ''
       + builtins.readFile ./init.zsh
     );
@@ -128,22 +127,27 @@ in
   home.file.".local/zsh_plugins/plugins/zsh-syntax-highlighting".source =
     inputs.zsh-syntax-highlighting;
 
-  home.file.".ssh/config.d/config" = lib.mkIf isPersonalDarwin {
+  home.file.".ssh/config.d/config" = {
     source = ./ssh-config;
   };
 
-  home.file."Library/Application Support/iTerm2/DynamicProfiles/dream.json" =
-    lib.mkIf isPersonalDarwin
-      {
-        text = lib.replaceStrings [ "/Users/dream" ] [ config.home.homeDirectory ] (
-          builtins.readFile ./iterm2-profile.json
-        );
-      };
+  home.file."Library/Application Support/iTerm2/DynamicProfiles/dream.json" = {
+    text = lib.replaceStrings [ "/Users/dream" ] [ config.home.homeDirectory ] (
+      builtins.readFile ./iterm2-profile.json
+    );
+  };
 
   # ---- fish: shellInit ----
   programs.fish = {
     enable = lib.mkForce true;
-    shellInit = builtins.readFile ./init.fish;
+    shellInit =
+      builtins.readFile ./init.fish
+      + ''
+
+        if test -r "${config.home.homeDirectory}/.config/secrets/zotero/api.fish"
+          source "${config.home.homeDirectory}/.config/secrets/zotero/api.fish"
+        end
+      '';
   };
 
   # ---- ssh: remove keepalive, only github.com ----
@@ -203,7 +207,7 @@ in
   programs.git.signing.signByDefault = lib.mkForce false;
 
   # ---- VS Code: portable subset of the current local settings ----
-  programs.vscode.profiles.default = lib.mkIf isPersonalDarwin {
+  programs.vscode.profiles.default = {
     userSettings = lib.mapAttrs (_: lib.mkForce) {
       "update.mode" = "manual";
       "extensions.autoUpdate" = false;
@@ -284,10 +288,9 @@ in
   };
 
   # ---- extra packages ----
-  home.packages =
-    (with pkgs; [
-      claude-code
-      kubectl
-    ])
-    ++ lib.optionals isPersonalDarwin [ pkgs.codex ];
+  home.packages = with pkgs; [
+    claude-code
+    codex
+    kubectl
+  ];
 }

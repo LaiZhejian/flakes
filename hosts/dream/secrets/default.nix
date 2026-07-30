@@ -9,6 +9,7 @@ let
   secretNames = [
     "HUGGINGFACE_TOKEN"
     "WAKATIME_API_KEY"
+    "ZOTERO_API_KEY"
     "ZOTERO_EASYSCHOLAR_API_KEY"
     "ZOTERO_GPT_API_KEY"
     "ZOTERO_GPT_EMBEDDINGS_API_KEY"
@@ -63,6 +64,24 @@ in
         content = ''
           [settings]
           api_key = ${secret "WAKATIME_API_KEY"}
+        '';
+      };
+
+      "zotero-api.sh" = {
+        path = "${config.home.homeDirectory}/.config/secrets/zotero/api.sh";
+        mode = "0400";
+        content = ''
+          export ZOTERO_API_KEY='${secret "ZOTERO_API_KEY"}'
+          export ZOTERO_USER_ID='10270346'
+        '';
+      };
+
+      "zotero-api.fish" = {
+        path = "${config.home.homeDirectory}/.config/secrets/zotero/api.fish";
+        mode = "0400";
+        content = ''
+          set -gx ZOTERO_API_KEY '${secret "ZOTERO_API_KEY"}'
+          set -gx ZOTERO_USER_ID '10270346'
         '';
       };
 
