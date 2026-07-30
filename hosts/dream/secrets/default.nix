@@ -164,6 +164,16 @@ in
     };
   };
 
+  # Home Manager's setupLaunchAgents already installs/reloads this agent.
+  # The upstream Darwin activation immediately bootouts and bootstraps it
+  # again, which races with launchd and intermittently fails with error 5.
+  home.activation.sops-nix = lib.mkForce (
+    lib.hm.dag.entryAfter [ "setupLaunchAgents" ] ''
+      /bin/launchctl kickstart -k \
+        "gui/$(id -u ${config.home.username})/org.nix-community.home.sops-nix"
+    ''
+  );
+
   # Zotero generates a random profile directory. Link the secret preferences
   # into every default profile that currently exists instead of hard-coding a
   # machine-specific profile ID. On a fresh machine, launch Zotero once and
