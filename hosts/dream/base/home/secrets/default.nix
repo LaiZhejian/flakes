@@ -7,6 +7,7 @@
 
 let
   secretNames = [
+    "DEEPSEEK_API_KEY"
     "HUGGINGFACE_TOKEN"
     "WAKATIME_API_KEY"
     "ZOTERO_API_KEY"
@@ -56,6 +57,36 @@ in
         path = "${config.home.homeDirectory}/.tokens/huggingface";
         mode = "0400";
         content = secret "HUGGINGFACE_TOKEN";
+      };
+
+      "claude-code.sh" = {
+        path = "${config.home.homeDirectory}/.config/secrets/claude-code/env.sh";
+        mode = "0400";
+        content = ''
+          export ANTHROPIC_BASE_URL='https://api.deepseek.com/anthropic'
+          export ANTHROPIC_AUTH_TOKEN='${secret "DEEPSEEK_API_KEY"}'
+          export ANTHROPIC_MODEL='deepseek-v4-pro[1m]'
+          export ANTHROPIC_DEFAULT_OPUS_MODEL='deepseek-v4-pro[1m]'
+          export ANTHROPIC_DEFAULT_SONNET_MODEL='deepseek-v4-pro[1m]'
+          export ANTHROPIC_DEFAULT_HAIKU_MODEL='deepseek-v4-flash'
+          export CLAUDE_CODE_SUBAGENT_MODEL='deepseek-v4-flash'
+          export CLAUDE_CODE_EFFORT_LEVEL='max'
+        '';
+      };
+
+      "claude-code.fish" = {
+        path = "${config.home.homeDirectory}/.config/secrets/claude-code/env.fish";
+        mode = "0400";
+        content = ''
+          set -gx ANTHROPIC_BASE_URL 'https://api.deepseek.com/anthropic'
+          set -gx ANTHROPIC_AUTH_TOKEN '${secret "DEEPSEEK_API_KEY"}'
+          set -gx ANTHROPIC_MODEL 'deepseek-v4-pro[1m]'
+          set -gx ANTHROPIC_DEFAULT_OPUS_MODEL 'deepseek-v4-pro[1m]'
+          set -gx ANTHROPIC_DEFAULT_SONNET_MODEL 'deepseek-v4-pro[1m]'
+          set -gx ANTHROPIC_DEFAULT_HAIKU_MODEL 'deepseek-v4-flash'
+          set -gx CLAUDE_CODE_SUBAGENT_MODEL 'deepseek-v4-flash'
+          set -gx CLAUDE_CODE_EFFORT_LEVEL 'max'
+        '';
       };
 
       "wakatime.cfg" = {
