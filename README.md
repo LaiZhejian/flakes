@@ -134,11 +134,11 @@ Templates:
     ```
     nix build --no-link --print-build-logs .#darwinConfigurations.darwin.system --dry-run
     ```
-- Merge [the updates from daily](https://github.com/Undefined01/flakes/compare/dev...bot/dev-lock):
+- Merge [the updates from daily](https://github.com/LaiZhejian/flakes/compare/main...bot/main-lock):
 
     ```
-    git fetch origin bot/dev-lock
-    git merge --squash origin/bot/dev-lock
+    git fetch origin bot/main-lock
+    git merge --squash origin/bot/main-lock
     ```
 - Debug a package:
 

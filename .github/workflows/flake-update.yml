@@ -6,30 +6,30 @@ on:
     - cron: "0 1 * * *"
   push:
     branches:
-      - dev
+      - main
   workflow_dispatch: {}
 
 permissions:
   contents: write
 
 concurrency:
-  group: flake-update-bot-dev-lock
+  group: flake-update-bot-main-lock
   cancel-in-progress: true
 
 env:
-  SOURCE_BRANCH: dev
-  TARGET_BRANCH: bot/dev-lock
+  SOURCE_BRANCH: main
+  TARGET_BRANCH: bot/main-lock
 
 jobs:
   update-lock:
-    name: Update bot/dev-lock
+    name: Update bot/main-lock
     runs-on: ubuntu-latest
     permissions:
       contents: write
       actions: write
 
     steps:
-      - name: Checkout dev
+      - name: Checkout main
         uses: actions/checkout@v6
         with:
           ref: ${{ env.SOURCE_BRANCH }}
@@ -48,7 +48,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Prepare bot/dev-lock
+      - name: Prepare bot/main-lock
         run: |
           set -euo pipefail
 
