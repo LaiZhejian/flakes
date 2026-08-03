@@ -51,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/xishang0128/sparkle/releases/download/${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-/JYek3ZSmuDAf/eLknU4ch7qstyq8jxcQKTM5ze7M0k=";
-        aarch64-linux = "sha256-BLjBMCo32yP1l4IzFRKs/oqEa+wzAVE6ShzNUTZyW98=";
-        x86_64-darwin = "sha256-r/E/f2ruJ2/wQ+vKtok4ZaAEzcwCKQ4wfOBk6Dgahdc=";
-        aarch64-darwin = "sha256-DWgF0kPT/FzhAi2q4cWmG7v8reOc0VXcqFo1X82htzc=";
+        x86_64-linux = "sha256-DjyMkbIGu9+lF9V7hkYYQwEhQiDVDjsCD5bS/sWT5sI=";
+        aarch64-linux = "sha256-+4Xs2egn6rFLl0E/DTViUCltN0blk9mvM07fDXN/ASo=";
+        x86_64-darwin = "sha256-aMmEhNrgoKQ9JiLzqZQRXpN/gaFNR0TY+COQa12xGKA=";
+        aarch64-darwin = "sha256-ic/cTIFt0q4rg/fvfJ48hIQwIGtBXhHxTMtwqqId0wU=";
       };
     };
 
