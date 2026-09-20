@@ -25,7 +25,7 @@ let
       }
     else
       builtins.mapAttrs (name: value: getSystemPackages value) attr;
-  flake = builtins.getFlake (toString ../..);
+  flake = builtins.getFlake ("path:" + toString ../..);
   packages =
     if currentSystem == "x86_64-linux" then
       flake.nixosConfigurations |> mapAttrs (_: cfg: getSystemPackages cfg)

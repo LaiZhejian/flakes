@@ -10,8 +10,7 @@
 {
   # Dream-owned container configuration; deliberately independent of Darwin imports.
   home.username = hostMeta.username;
-  home.homeDirectory =
-    if hostMeta.username == "root" then "/root" else "/home/${hostMeta.username}";
+  home.homeDirectory = if hostMeta.username == "root" then "/root" else "/home/${hostMeta.username}";
   home.sessionPath = [ "${config.home.homeDirectory}/.local/bin" ];
   home.sessionVariables = lib.optionalAttrs (hostMeta.username == "root") {
     NIX_REMOTE = "local";
@@ -98,7 +97,8 @@
   home.file.".local/zsh_plugins/plugins/fzf-ls".source = inputs.zsh-fzf-ls;
   home.file.".local/zsh_plugins/plugins/fzf-tab".source = inputs.zsh-fzf-tab;
   home.file.".local/zsh_plugins/plugins/zsh-autosuggestions".source = inputs.zsh-autosuggestions;
-  home.file.".local/zsh_plugins/plugins/zsh-syntax-highlighting".source = inputs.zsh-syntax-highlighting;
+  home.file.".local/zsh_plugins/plugins/zsh-syntax-highlighting".source =
+    inputs.zsh-syntax-highlighting;
 
   programs.uv.settings = lib.mkForce {
     pip.index-url = "https://bytedpypi.byted.org/simple/";
