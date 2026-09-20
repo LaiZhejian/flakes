@@ -115,11 +115,14 @@
             inherit system;
             overlays = builtins.attrValues self.overlays;
           };
+          packageTree = lib.packagesFromDirectoryRecursive {
+            callPackage = lib.callPackageWith pkgs;
+            directory = ./pkgs;
+          };
         in
-        lib.packagesFromDirectoryRecursive {
-          callPackage = lib.callPackageWith pkgs;
-          directory = ./pkgs;
-        }
+        # Flake package outputs must contain derivations directly. Nested
+        # package sets such as darwinPkgs remain available through overlays.
+        lib.filterAttrs (_: lib.isDerivation) packageTree
       );
 
       devShells = forAllSystems (
@@ -129,10 +132,16 @@
             inherit system;
             overlays = builtins.attrValues self.overlays;
           };
+          shellTree = lib.packagesFromDirectoryRecursive {
+            callPackage = lib.callPackageWith pkgs;
+            directory = ./shell;
+          };
         in
-        lib.packagesFromDirectoryRecursive {
-          callPackage = lib.callPackageWith pkgs;
-          directory = ./shell;
+        # Ignore helper directories that do not evaluate to shells and expose
+        # the historical multi/shell.nix shell at the usual top level.
+        lib.filterAttrs (_: lib.isDerivation) shellTree
+        // lib.optionalAttrs (lib.isDerivation (shellTree.multi.shell or null)) {
+          multi = shellTree.multi.shell;
         }
       );
 
