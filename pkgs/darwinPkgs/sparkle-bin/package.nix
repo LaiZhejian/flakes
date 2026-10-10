@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sparkle";
-  version = "1.26.5";
+  version = "1.26.9";
 
   src =
     let
@@ -51,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/xishang0128/sparkle/releases/download/${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-4ptIDKqSWsd9kni41LSa0FdAT0KUqmTellUZjShXLHs=";
-        aarch64-linux = "sha256-OD1DMa80E+jlvEYumMjDvHbGMSDJsw7S3mE7aIKe/D8=";
-        x86_64-darwin = "sha256-Ln1ene6KoVTzo82IpTxD1OhLNDbgGpZ0+g4suLyUwBg=";
-        aarch64-darwin = "sha256-oEcQAZHlg+kKiEhx/+8YA1DUjrWPu+/VpK3mykZutYs=";
+        x86_64-linux = "sha256-4cz9tlP6qFCiXYmEKAA63AFziaVrgrH7SX03j6S0Oxk=";
+        aarch64-linux = "sha256-ifXafFQukipoCXhhepFRVXY6REdaGrHfVEWaV8jJU58=";
+        x86_64-darwin = "sha256-o6YLPCNPqh2f+ZRI6/1IkSI4h6tjlY2kWAmrbSawhO8=";
+        aarch64-darwin = "sha256-MB4drwG1yDbSguPQ3sd59R5DqNGCsvhQ33oEvNY81aw=";
       };
     };
 
